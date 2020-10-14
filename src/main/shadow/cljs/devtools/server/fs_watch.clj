@@ -10,10 +10,11 @@
 
 (defn start [config directories file-exts publish-fn]
   (let [ns-sym
-        (if (and (str/includes? os-name "Mac") (not (false? (:hawk config))))
-          ;; macOS doesn't have native support so it uses polling
+        (if (not (false? (:hawk config)))
+          ;; containers don't have native support so they should use polling
           ;; which means 2sec delay, hawk does the native stuff
           ;; so its a lot faster but doesn't properly support delete
+          ;; details could be found here https://github.com/wkf/hawk/issues/10
           'shadow.cljs.devtools.server.fs-watch-hawk
           ;; jvm on windows/linux supports watch fine
           'shadow.cljs.devtools.server.fs-watch-jvm)]
